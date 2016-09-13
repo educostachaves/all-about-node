@@ -47,10 +47,11 @@ function webserver(req, res) {
 	let contentType = mimes[path.extname(filepath)] //mimes['.css'] === 'text/css'
 
 	fileAcess(filepath)
-		.then(fileReader)
-		.then(content => {
+		.then(streamFile)
+		.then(fileStream => {
 			res.writeHead(200, {'content-type': contentType});
-			res.end(content, 'utf-8');
+			//res.end(content, 'utf-8');
+			fileStream.pipe(res);
 		})
 		.catch(error => {
 			res.writeHead(500);
